@@ -20,6 +20,7 @@ flake8 = "^5.0.4"
 pytest-cov = "^4.0.0"
 # https://github.com/psf/black/issues/1928#issuecomment-910337314
 typing-extensions = "^4.3.0"
+commitizen = "^2.35.0"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^7.1.3"
