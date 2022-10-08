@@ -10,6 +10,8 @@ jobs:
         python-version: ["3.9", "3.10"]
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: Install poetry
         run: pipx install poetry
       - name: Set up Python ${{ matrix.python-version }}
@@ -19,6 +21,8 @@ jobs:
           cache: poetry
       - name: Install deps
         run: poetry install
+      - name: Check commit message(s)
+        run: poetry run cz check --rev-range ${{github.base_ref}}..${{github.head_ref}}
       - name: Lint with flake8
         run: poetry run flake8 .
       - name: Lint with black
