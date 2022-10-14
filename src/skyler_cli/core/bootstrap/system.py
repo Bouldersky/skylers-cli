@@ -111,6 +111,7 @@ class SystemBootstrapper:
     def bootstrap_system(self) -> None:
         self.bootstrap_bashrc()
         self.bootstrap_initrc()
+        self.bootstrap_tmux_conf()
 
     def bootstrap_bashrc(self) -> None:
         template_data = self._calculate_bashrc_template_data()
@@ -149,4 +150,9 @@ class SystemBootstrapper:
     def bootstrap_initrc(self) -> None:
         data = self._read_template_resource("inputrc")
         with (self.home_path / ".inputrc").open("w") as inputrc_f:
+            inputrc_f.write(data)
+
+    def bootstrap_tmux_conf(self) -> None:
+        data = self._read_template_resource("tmux.conf")
+        with (self.home_path / ".tmux.conf").open("w") as inputrc_f:
             inputrc_f.write(data)

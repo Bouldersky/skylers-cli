@@ -65,3 +65,7 @@ class TestStaticFilesBootstrapped:
     def test_inputrc_created(self, tmp_path, system_bootstrapper):
         system_bootstrapper.bootstrap_system()
         assert (tmp_path / ".inputrc").exists(), ".inputrc should be created"
+
+    def test_tmux_config_created(self, tmp_path, system_bootstrapper):
+        system_bootstrapper.bootstrap_system()
+        assert (tmp_path / ".tmux.conf").exists(), ".tmux.conf should be created"
