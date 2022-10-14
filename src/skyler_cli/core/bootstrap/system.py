@@ -108,6 +108,10 @@ class SystemBootstrapper:
     def _cmd_exists(cmd: str) -> bool:
         return shutil.which(cmd) is not None
 
+    def bootstrap_system(self) -> None:
+        self.bootstrap_bashrc()
+        self.bootstrap_initrc()
+
     def bootstrap_bashrc(self) -> None:
         template_data = self._calculate_bashrc_template_data()
         result = chevron.render(self._read_template_resource(".bashrc"), template_data)
@@ -141,3 +145,8 @@ class SystemBootstrapper:
 
         aliases_list = [{"key": k, "value": v} for k, v in alias_dict.items()]
         return aliases_list
+
+    def bootstrap_initrc(self) -> None:
+        data = self._read_template_resource("inputrc")
+        with (self.home_path / ".inputrc").open("w") as inputrc_f:
+            inputrc_f.write(data)
