@@ -4,6 +4,7 @@ import chevron
 import importlib.resources
 from skyler_cli.core.bootstrap import system_template
 import shutil
+from os import makedirs
 
 
 class OS(Enum):
@@ -12,7 +13,7 @@ class OS(Enum):
 
 
 class MachineType(Enum):
-    DEV = 0
+    WORKSTATION = 0
     SERVER = 1
 
 
@@ -99,6 +100,7 @@ class SystemBootstrapper:
         self.machine_type = machine_type
         self.is_personal = is_personal
         self.home_path = home_path
+        self.conf_dir_path = home_path / ".config"
 
     @staticmethod
     def _read_template_resource(resource: str) -> str:
@@ -109,9 +111,15 @@ class SystemBootstrapper:
         return shutil.which(cmd) is not None
 
     def bootstrap_system(self) -> None:
+        self._setup_config_dir()
         self.bootstrap_bashrc()
         self.bootstrap_initrc()
         self.bootstrap_tmux_conf()
+        if self.os == OS.LINUX and self.machine_type == MachineType.WORKSTATION:
+            self.bootstrap_compton_conf()
+
+    def _setup_config_dir(self):
+        makedirs(self.conf_dir_path, exist_ok=True)
 
     def bootstrap_bashrc(self) -> None:
         template_data = self._calculate_bashrc_template_data()
@@ -156,3 +164,9 @@ class SystemBootstrapper:
         data = self._read_template_resource("tmux.conf")
         with (self.home_path / ".tmux.conf").open("w") as inputrc_f:
             inputrc_f.write(data)
+
+    def bootstrap_compton_conf(self) -> None:
+        self._setup_config_dir()
+        data = self._read_template_resource("compton.conf")
+        with (self.conf_dir_path / "compton.conf").open("w") as f:
+            f.write(data)
