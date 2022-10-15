@@ -117,6 +117,7 @@ class SystemBootstrapper:
         self.bootstrap_tmux_conf()
         if self.os == OS.LINUX and self.machine_type == MachineType.WORKSTATION:
             self.bootstrap_compton_conf()
+            self.bootstrap_i3_conf()
 
     def _setup_config_dir(self):
         makedirs(self.conf_dir_path, exist_ok=True)
@@ -169,4 +170,11 @@ class SystemBootstrapper:
         self._setup_config_dir()
         data = self._read_template_resource("compton.conf")
         with (self.conf_dir_path / "compton.conf").open("w") as f:
+            f.write(data)
+
+    def bootstrap_i3_conf(self) -> None:
+        i3_conf_dir = self.conf_dir_path / "i3"
+        makedirs(i3_conf_dir, exist_ok=True)
+        data = self._read_template_resource("i3_config")
+        with (i3_conf_dir / "config").open("w") as f:
             f.write(data)

@@ -1,0 +1,284 @@
+#font pango:monospace 8
+
+# This font is widely installed, provides lots of unicode glyphs, right-to-left
+# text rendering and scalability on retina/hidpi displays (thanks to pango).
+#font pango:DejaVu Sans Mono 8
+
+# fix screen layout
+# **Now done in the X11 startup scripts file instead of here.
+#exec --no-startup-id /usr/local/bin/arrangeScreens
+
+# turn off window borders
+default_border pixel 2
+
+# set wallpaper
+exec --no-startup-id setWallpaper
+
+# ssh into server for remote access
+exec --no-startup-id autossh -M 8022:7 -f -N -T -R8022:localhost:22 skyler@myserver
+
+# start conky
+#exec --no-startup-id conky -c /home/skyler/.config/conky/conkyL.conf
+
+exec compton
+
+# fix mouse sensitivity
+#exec $(sleep 3; fixMouseSensitivity) &
+exec --no-startup-id fixMouseSensitivity
+
+
+# start speedcrunch
+exec --no-startup-id speedcrunch
+bindsym $mod+space scratchpad show
+for_window [class="SpeedCrunch"] resize set 800px 800px, move scratchpad
+
+# put psensor in the scratchpad
+#for_window [class="Psensor"] floating enable resize set 1000px 500px, move position 0 0, move scratchpad
+
+# make peek windows floating
+for_window [title="peek"] floating enable
+
+# sleep shortcut
+bindsym $mod+shift+s exec --no-startup-id /usr/local/bin/sleep_to_ram
+
+# start dropbox
+exec --no-startup-id dropbox &
+
+# start polybar
+exec --no-startup-id polybar -rq main
+
+# start unclutter
+exec --no-startup-id unclutter --timeout 1 &
+
+smart_gaps on
+smart_borders no_gaps
+
+gaps inner 5
+gaps outer 0
+
+# set the mod key
+set $mod Mod1
+
+# use these keys for focus, movement, and resize directions when reaching for
+# the arrows is not convenient
+set $up k
+set $down j
+set $left h
+set $right l
+
+# Audio control keys
+bindsym control+Break exec --no-startup-id /usr/local/bin/toggleAudio
+bindsym control+Prior exec --no-startup-id /usr/local/bin/incrementVolume
+bindsym control+Next exec --no-startup-id /usr/local/bin/decrementVolume
+
+# use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# start a terminal
+bindsym $mod+Return exec --no-startup-id openTerm
+#bindsym $mod+Return exec kitty -1
+
+# start a browser
+bindsym $mod+Shift+f exec --no-startup-id firefox --no-startup-id
+
+# kill focused window
+bindsym $mod+Shift+q kill
+
+# take screenshot
+bindsym Mod1+Shift+4 exec --no-startup-id deepin-screenshot
+
+# start dmenu (a program launcher)
+# bindsym $mod+d exec dmenu_run
+# There also is the (new) i3-dmenu-desktop which only displays applications
+# shipping a .desktop file. It is a wrapper around dmenu, so you need that
+# installed.
+# bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
+
+bindsym --release $mod+d exec --no-startup-id rofi -show run
+# bindsym --release $mod+Shift+w exec --no-startup-id rofi -show window
+bindsym --release $mod+Tab exec --no-startup-id rofi -show window
+
+# change focus
+bindsym $mod+$left focus left
+bindsym $mod+$down focus down
+bindsym $mod+$up focus up
+bindsym $mod+$right focus right
+
+# move focused window
+bindsym $mod+Shift+$left move left
+bindsym $mod+Shift+$down move down
+bindsym $mod+Shift+$up move up
+bindsym $mod+Shift+$right move right
+
+# split in horizontal orientation
+bindsym $mod+c split h
+
+# split in vertical orientation
+bindsym $mod+v split v
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+
+# change container layout (stacked, tabbed, toggle split)
+bindsym $mod+s layout stacking
+bindsym $mod+t layout tabbed
+bindsym $mod+e layout toggle split
+
+# toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
+# change focus between tiling / floating windows
+bindsym $mod+a focus parent
+
+# Define names for default workspaces for which we configure key bindings later on.
+# We use variables to avoid repeating the names in multiple places.
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "q"
+set $ws5 "w"
+set $ws6 "e"
+set $ws7 "a"
+set $ws8 "s"
+set $ws9 "d"
+set $ws10 "z"
+set $ws11 "x"
+set $ws12 "c"
+
+# assign workspaces to screens
+workspace 1 output HDMI-0
+workspace 2 output DP-2
+workspace 3 output HDMI-1
+workspace q output HDMI-0
+workspace w output DP-2
+workspace e output HDMI-1
+workspace a output HDMI-0
+workspace s output DP-2
+workspace d output HDMI-1
+workspace z output HDMI-0
+workspace x output DP-2
+workspace c output HDMI-1
+
+bindsym $mod+1 focus output HDMI-0
+bindsym $mod+2 focus output DP-2
+bindsym $mod+3 focus output HDMI-1
+
+# reload the configuration file
+bindsym $mod+Shift+c reload
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $mod+Shift+r restart
+# exit i3 (logs you out of your X session)
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+
+# resize window (you can also use the mouse for that)
+mode "resize" {
+        # These bindings trigger as soon as you enter the resize mode
+
+        # s for 'shorter'
+        bindsym s           resize shrink height 10 px or 10 ppt
+        # t for 'taller'
+        bindsym t           resize grow height 10 px or 10 ppt
+        # n for 'narrower'
+        bindsym n           resize shrink width 10 px or 10 ppt
+        # w for 'wider'
+        bindsym w           resize grow width 10 px or 10 ppt
+
+        # back to normal: Enter or Escape or $mod+r
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+        bindsym $mod+r mode "default"
+}
+
+mode "workspace" {
+    # change focus to a specific workspace but DONT switch back to the default mode
+	bindsym $mod+1 workspace $ws1
+	bindsym $mod+2 workspace $ws2
+	bindsym $mod+3 workspace $ws3
+	bindsym $mod+q workspace $ws4
+	bindsym $mod+w workspace $ws5
+	bindsym $mod+e workspace $ws6
+	bindsym $mod+a workspace $ws7
+	bindsym $mod+s workspace $ws8
+	bindsym $mod+d workspace $ws9
+	bindsym $mod+z workspace $ws10
+	bindsym $mod+x workspace $ws11
+	bindsym $mod+c workspace $ws12
+
+    # change focus to a workspace and switch back to the default mode
+	bindsym 1 workspace $ws1; mode "default"
+	bindsym 2 workspace $ws2; mode "default"
+	bindsym 3 workspace $ws3; mode "default"
+	bindsym q workspace $ws4; mode "default"
+	bindsym w workspace $ws5; mode "default"
+	bindsym e workspace $ws6; mode "default"
+	bindsym a workspace $ws7; mode "default"
+	bindsym s workspace $ws8; mode "default"
+	bindsym d workspace $ws9; mode "default"
+	bindsym z workspace $ws10; mode "default"
+	bindsym x workspace $ws11; mode "default"
+	bindsym c workspace $ws12; mode "default"
+
+    # move window to a workspace and change focus to that workspace
+	bindsym Shift+1 move window to workspace $ws1; mode "default"; workspace $ws1
+	bindsym Shift+2 move window to workspace $ws2; mode "default"; workspace $ws2
+	bindsym Shift+3 move window to workspace $ws3; mode "default"; workspace $ws3
+	bindsym Shift+q move window to workspace $ws4; mode "default"; workspace $ws4
+	bindsym Shift+w move window to workspace $ws5; mode "default"; workspace $ws5
+	bindsym Shift+e move window to workspace $ws6; mode "default"; workspace $ws6
+	bindsym Shift+a move window to workspace $ws7; mode "default"; workspace $ws7
+	bindsym Shift+s move window to workspace $ws8; mode "default"; workspace $ws8
+	bindsym Shift+d move window to workspace $ws9; mode "default"; workspace $ws9
+	bindsym Shift+z move window to workspace $ws10; mode "default"; workspace $ws10
+	bindsym Shift+x move window to workspace $ws11; mode "default"; workspace $ws11
+	bindsym Shift+c move window to workspace $ws12; mode "default"; workspace $ws12
+ 
+    # move window to a workspace but DON'T change focus to that workspace
+	bindsym Shift+ctrl+1 move window to workspace $ws1; mode "default"
+	bindsym Shift+ctrl+2 move window to workspace $ws2; mode "default"
+	bindsym Shift+ctrl+3 move window to workspace $ws3; mode "default"
+	bindsym Shift+ctrl+q move window to workspace $ws4; mode "default"
+	bindsym Shift+ctrl+w move window to workspace $ws5; mode "default"
+	bindsym Shift+ctrl+e move window to workspace $ws6; mode "default"
+	bindsym Shift+ctrl+a move window to workspace $ws7; mode "default"
+	bindsym Shift+ctrl+s move window to workspace $ws8; mode "default"
+	bindsym Shift+ctrl+d move window to workspace $ws9; mode "default"
+	bindsym Shift+ctrl+z move window to workspace $ws10; mode "default"
+	bindsym Shift+ctrl+x move window to workspace $ws11; mode "default"
+	bindsym Shift+ctrl+c move window to workspace $ws12; mode "default"
+
+	bindsym Return mode "default"
+	bindsym Escape mode "default"
+	bindsym $mod+w mode "default"
+}
+
+bindsym $mod+r mode "resize"
+bindsym $mod+w mode "workspace"
+
+focus_follows_mouse no
+mouse_warping output
+
+# theme
+
+# class                 border  bground text    indicator child_border
+client.focused          #000000 #FFFFFF #000000 #000000   #777777
+client.focused_inactive #333333 #5F676A #FFFFFF #484E50   #5F676A
+client.unfocused        #333333 #222222 #888888 #292D2E   #222222
+client.urgent           #2F343A #900000 #FFFFFF #900000   #900000
+client.placeholder      #000000 #0C0C0C #FFFFFF #000000   #0C0C0C
+
+client.background       #FFFFFF
+
+# Start i3bar to display a workspace bar (plus the system information i3status
+# finds out, if available)
+# bar {
+#         status_command i3status
+# 	position top
+# }
+
+
+# TEMP: Fractal window arrangement
+assign [class="Fractal Box"] output HDMI-0
+#assign [class="Fractal Box"] output DP-2
+for_window [class="Fractal Box"] floating enable
+assign [class="Settings"] output HDMI-0
+for_window [class="Settings"] floating enable

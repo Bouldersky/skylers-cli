@@ -83,3 +83,21 @@ class TestStaticFilesBootstrapped:
         assert (
             tmp_path / ".config" / "compton.conf"
         ).exists(), "compton should be configured on a linux workstation"
+
+    def test_i3_conf_on_linux_workstations(self, tmp_path, system_bootstrapper):
+        system_bootstrapper.machine_type = MachineType.WORKSTATION
+        system_bootstrapper.os = OS.LINUX
+        system_bootstrapper.bootstrap_system()
+        assert (tmp_path / ".config/i3/config").exists()
+
+    def test_no_i3_conf_on_mac(self, tmp_path, system_bootstrapper):
+        system_bootstrapper.machine_type = MachineType.WORKSTATION
+        system_bootstrapper.os = OS.OS_X
+        system_bootstrapper.bootstrap_system()
+        assert not (tmp_path / ".config/i3/config").exists()
+
+    def test_no_i3_conf_on_linux_server(self, tmp_path, system_bootstrapper):
+        system_bootstrapper.machine_type = MachineType.SERVER
+        system_bootstrapper.os = OS.LINUX
+        system_bootstrapper.bootstrap_system()
+        assert not (tmp_path / ".config/i3/config").exists()
