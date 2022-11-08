@@ -11,7 +11,7 @@ sc = "skyler_cli.cli.main:app"
 
 [tool.poetry.dependencies]
 python = "^3.9"
-typer = {extras = ["all"], version = "^0.6.1"}
+typer = {extras = ["all"], version = ">=0.6.1,<0.8.0"}
 chevron = "0.14.0"
 
 
